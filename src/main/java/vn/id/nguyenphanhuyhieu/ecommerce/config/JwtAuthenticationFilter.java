@@ -23,21 +23,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/auth") || requestURI.startsWith("/product")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         try {
             String token = getJwtFromRequest(request);
+            String requestURI = request.getRequestURI();
+            if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/auth") || requestURI.startsWith("/product")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             if (token != null) {
                 token = token.replace("Bearer ", "");
                 request.setAttribute("token", token);
             }
             String userName = userService.getUserFromToken(token).getUsername();
-            System.out.println(userName);
             UserDetails userDetails = userService.loadUserByUsername(userName);
-            System.out.println(userDetails.getUsername());
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken
                         authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -59,4 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
 }
