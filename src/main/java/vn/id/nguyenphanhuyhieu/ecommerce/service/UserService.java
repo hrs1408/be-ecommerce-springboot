@@ -47,10 +47,10 @@ public class UserService implements UserDetailsService {
     public Login login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid username");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username");
         }
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid password");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
         }
         return Login.of(user.getId(), this.accessTokenSecret, this.refreshTokenSecret);
     }

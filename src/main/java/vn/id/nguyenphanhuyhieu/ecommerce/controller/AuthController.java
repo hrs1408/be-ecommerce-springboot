@@ -44,7 +44,6 @@ public class AuthController {
     @PostMapping(value = "/login")
     public ResponseEntity<ResponseObject> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
         var login = service.login(request);
-        //set refresh token to cookie
         Cookie cookie = new Cookie("refresh_token", login.getRefreshToken().getToken());
         cookie.setMaxAge(60 * 60 * 24 * 30);
         cookie.setHttpOnly(true);
