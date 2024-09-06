@@ -34,6 +34,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private NotificationService notificationService;
+
     private final String accessTokenSecret;
     private final String refreshTokenSecret;
 
@@ -52,6 +55,7 @@ public class UserService implements UserDetailsService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
         }
+        notificationService.sendNotification("User " + user.getUsername() + " logged in");
         return Login.of(user.getId(), this.accessTokenSecret, this.refreshTokenSecret);
     }
 

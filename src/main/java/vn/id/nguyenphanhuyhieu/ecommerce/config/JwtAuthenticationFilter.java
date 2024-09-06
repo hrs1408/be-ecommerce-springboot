@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = getJwtFromRequest(request);
             String requestURI = request.getRequestURI();
-            if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/auth") || requestURI.startsWith("/product")) {
+            if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/ws") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/auth") || requestURI.startsWith("/product")) {
                 filterChain.doFilter(request, response);
                 return;
             }
